@@ -15,7 +15,7 @@ El encoder es un dispositivo óptico digital que convierte el movimiento en una 
 	\item \textbf{Absoluto}: En principio, se parece al encoder lineal incremental. La diferencia es que da un valor absoluto de la distancia recorrida en cualquier momento. Así, las posibilidades de perder los pulsos a altas velocidades son menores. La salida es digital en este caso. La escala se marca con una secuencia de tiras opacas y transparentes. Si el bloque opaco que aparece en la escala de la ilustración representa 1 (uno) y el bloque transparente 0 (cero), entonces la columna de la extrema izquierda mostrará un número binario cómo 00000, es decir, un valor decimal de 0, y la columna siguiente mostrará un número binario 00001, es decir, una valor decimal de 1.
 \end{itemize}
 
-\begin{figure}[h] % h = aquí, t = top, b = bottom, p = página separada
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{encoderincr.jpg} % Ajusta el tamaño
 	\caption{Encoder Incremental}
@@ -25,15 +25,33 @@ El encoder es un dispositivo óptico digital que convierte el movimiento en una 
 \addcontentsline{toc}{subsubsection}{Potenciometro}
 \subsection*{\quad\textbf{Potenciometro}}
 Dispositivo de resistencia variable que expresa desplazamientos lineales o angulares en términos de voltaje, Consiste en una clavija deslizante que hace contacto con un elemento resistivo; conforme se mueve este punto de contacto, la resistencia entre el contacto deslizante y las conexiones de los extremos del dispositivo cambia en proporción al desplazamiento, x y  para potenciómetros lineales y angulares, respectivamente.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{potenciometro.png} % Ajusta el tamaño
+	\caption{Diagrama Potenciometro}
+	\label{fig:ejemplo2}
+\end{figure}
 
 \addcontentsline{toc}{subsubsection}{LVDT}
 \subsection*{\quad\textbf{LVDT}}
 El transformador diferencial lineal variable (LVDT) es uno de los transductores de desplazamiento que más extensamente se usa, particularmente cuando se necesita alta precisión. Genera una señal de CA cuya magnitud se relaciona con el desplazamiento de un núcleo móvil. El concepto básico es el de un núcleo férrico que se mueve en un campo magnético, donde el campo se produce de un modo similar al campo de un transformador estándar. Existe un núcleo central, rodeado por dos bobinas secundarias idénticas y una bobina principal. Conforme el núcleo cambia su posición con respecto a las bobinas, cambia también el campo magnético y, por tanto, se modifica la amplitud de voltaje en la bobina secundaria como una función del desplazamiento del núcleo a través de un segmento considerable.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{LVDT.png} % Ajusta el tamaño
+	\caption{Sensor LVDT}
+	\label{fig:ejemplo3}
+\end{figure}
+\vspace{2cm}
 
 \addcontentsline{toc}{subsubsection}{Resólver}
 \subsection*{\quad\textbf{Resólver}}
 Los sincronizadores y resólvers son dispositivos analógicos que convierten la posición angular en señales eléctricas, a diferencia de los encoders digitales. Constan de un rotor giratorio y un estator estacionario, y requieren un convertidor analógico-digital para su procesamiento en computadoras. Los sincronizadores poseen tres devanados en el estator dispuestos a 120° en configuración "Y", lo que los hace más complejos y costosos, mientras que los resólvers tienen solo dos devanados a 90°, siendo más simples y económicos. Los resólvers modernos, especialmente los sin escobillas, utilizan un transformador para acoplar señales, eliminando el desgaste mecánico y aumentando su durabilidad. Operan en voltajes de 2V a 40V RMS y frecuencias de 400 Hz a 10 kHz, con precisiones angulares desde 5 hasta 0.5 minutos de arco. Su funcionamiento se basa en el principio del transformador rotatorio, donde la magnitud del voltaje inducido en el estator depende de la posición angular del rotor.
-
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{resolver.jpeg} % Ajusta el tamaño
+	\caption{Sensor resolver}
+	\label{fig:ejemplo4}
+\end{figure}
 
 \subsection{\textbf{Sensores de Velocidad}}
 Los sensores de velocidad realizan la medición tomando medidas de posición consecutivas a intervalos de tiempo constante, calculando la razón de cambio respecto al tiempo de los valores de posición, o lo determina en forma directa con base en diferentes principios.
@@ -66,6 +84,13 @@ Estos sensores pueden encontrar directamente la velocidad en cualquier momento y
 \subsection*{\quad\textbf{Sensor de Efecto Hall}}
 Otro dispositivo de medición de velocidad es el sensor de efecto Hall, cuyo principio se describe a continuación. Si una pieza plana de material conductor llamada chip Hall se sujeta a una diferencia de potencial en sus dos lados opuestos, como se indica en la figura 4.7, entonces el voltaje que se genera a través de las caras perpendiculares es cero. Pero si un campo magnético se induce en ángulos rectos al conductor, el voltaje se genera en las otras dos caras perpendiculares. Entre más alto sea el valor de campo, más lo será el nivel de voltaje. Si se utiliza un imán anular, el voltaje producido será proporcional a la velocidad de rotación del imán.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{EfectoHall.jpg} % Ajusta el tamaño
+	\caption{Sensor Efecto Hall}
+	\label{fig:ejemplo5}
+\end{figure}
+
 
 \subsection{\textbf{Sensores de Aceleración}}
 De manera parecida a las mediciones de velocidad que se dan a partir de la información de los sensores de posición, pueden encontrarse las aceleraciones como la razón de cambio respecto al tiempo de las velocidades obtenidas por los sensores de velocidad o calculado a partir de las informaciones de posición. Pero ésta no es una manera efi ciente para calcular
@@ -78,10 +103,24 @@ Una balanza de resorte es un ejemplo de un sensor de fuerza en donde se aplica u
 \subsection*{\quad\textbf{Galgas Extensiométricas}}
 El principio de este sensor es que el alargamiento de un conductor aumenta su resistencia eléctrica. La resistencia eléctrica normal para galgas es de 50-100 ohmios. El incremento de resistencia se debe a: Incremento de la longitud del conductor; y Decremento en el área del conductor. Las deformaciones ocasionan cambios en la resistencia eléctrica de las galgas, lo que se mide mediante su conexión al circuito de puente de Wheatstone como una de las cuatro resistencias. Éste es un método barato y preciso para medir deformaciones.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{galga.png} % Ajusta el tamaño
+	\caption{Sensor Galgas Extensiometricas}
+	\label{fig:ejemplo6}
+\end{figure}
+
 \addcontentsline{toc}{subsubsection}{Sensor Piezoeléctrico}
 \subsection*{\quad\textbf{Sensor Piezoeléctrico}}
 Un material piezoeléctrico presenta un fenómeno conocido como efecto piezoeléctrico. Este efecto señala que cuando cristales elásticos asimétricos se deforman mediante una fuerza, se desarrollará un potencial eléctrico dentro de la red cristalina deformada. Este efecto es reversible. Esto quiere decir que si se aplica un voltaje entre las superficies del cristal, éste cambiará sus dimensiones físicas. La magnitud y polaridad de las cargas inducidas son proporcionales a la magnitud y dirección de la fuerza aplicada. Los materiales piezoeléctricos son cuarzo, turmalina, sal de Rochalle y otros. El rango de fuerzas que pueden medirse usando sensores piezoeléctricos es de 1 a 20 kN y con una proporción de 2×1052×105. Estos sensores pueden usarse para medir un cambio instantáneo en la fuerza (fuerzas dinámicas).
 \cite{saha2014robotica}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{piezoelectrico.jpg} % Ajusta el tamaño
+	\caption{Sensor Piezoelectrico}
+	\label{fig:ejemplo7}
+\end{figure}
 \pagebreak
 
 
