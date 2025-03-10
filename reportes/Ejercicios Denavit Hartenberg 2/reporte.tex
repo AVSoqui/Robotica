@@ -1,11 +1,11 @@
 \documentclass[journal,12pt,onecolumn]{IEEEtran}
-\usepackage[utf8]{inputenc}   % Codificación de entrada
-\usepackage[T1]{fontenc}      % Codificación de fuente
-\usepackage[spanish,es-tabla]{babel}   % Idioma español
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
 \usepackage{lmodern}          % Fuente moderna
 \usepackage{amsmath, amssymb} % Matemáticas y símbolos
 \usepackage{graphicx} 		  % Gráficos e imágenes
-\graphicspath{{img/}{tablas/}{portada/}{robots/}}  % Las imágenes se buscarán en la carpeta "img"
+\graphicspath{{img/}{tablas/}{portada/}}  % Las imágenes se buscarán en la carpeta "img"
 \usepackage{longtable}      % Para tablas que se extienden en varias páginas
 \usepackage{tabularx}	% Tablas avanzadas
 \usepackage{threeparttable}
@@ -18,7 +18,6 @@
 \usepackage{subcaption}
 \usepackage{xcolor}
 \usepackage{setspace}
-
 
 %-------------------------------------------
 % Comandos personalizados
@@ -47,10 +46,8 @@
 
 %	Es innecesario poner el índice porque ya aparece en los marcadores del PDF
 %\tableofcontents
-\input{indice/indice}
 
 % Ejemplo de inclusión de una sección (por ejemplo, "introduccion.tex" debe estar en la carpeta "secciones" y se recomienda no usar carácteres especiales (tilde) o espacios)
-\input{secciones/introduccion}
 \input{secciones/robot2}
 \input{secciones/imagenes}
 \input{secciones/tablas}
@@ -62,6 +59,5 @@
 %-------------------------------------------
 \bibliographystyle{IEEEtran}  % Estilo de bibliografía IEEE
 % La bibliografía se tomará del archivo "fuentes.bib"
-\bibliography{fuentes}
 	
 \end{document}
