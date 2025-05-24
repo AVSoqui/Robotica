@@ -17,9 +17,33 @@ Si les sale el error \texttt{latexminted no se reconoce como un comando interno 
 \subsection{Cinemática Directa}
 Explicar las partes importantes del código de la cinemática directa.
 Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
+Primero, se crea una matriz homogenea A0, la cual representará la posición inicial. 
+\begin{matlabcode}{matlab}
+	R_inicial = euler2rotMat(orientacion_inicial, secuencia);
+    Matriz_cero = [0 0 0]
+    A0 = [R_inicial posicion_inicial
+    Matriz_cero 1]
+\end{matlabcode}
+
+Después, utilizando la tabla que contiene los parametros de Denavit Hartenberg y los límites de nuestro robot, establecemos el robot y la trayectoría a seguir.
+
+\begin{matlabcode}{matlab}
+	dh = readtable('datos\tabla_DH\robotFinal.csv');
+    robot = crear_robot(dh,A0);
+
+    periodo = 2;    % Periodo del movimiento cíclico
+    [q,dq,ddq] = trayectoria_q(robot,t,periodo);
+\end{matlabcode}
+En este caso, las articulaciones del robot realizarán un movimiento repetitivo cada 2 segundos, ya que este es el valor definido en el periodo del movimiento cíclico.
+
 \subsection{Cinemática Diferencial}
 Explicar las partes importantes del código de la cinemática diferencial.
 Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
+
+
+
+
 \subsection{Cinemática Inversa}
 Explicar las partes importantes del código de la cinemática inversa.
 Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
+
