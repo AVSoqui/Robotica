@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo options -->
+  <arg name="gazebo_gui" default="true"/>
+  <arg name="paused" default="false"/>
+  <arg name="world_name" default="worlds/empty.world"/>
+  <arg name="world_pose" default="-x 0 -y 0 -z 0 -R 0 -P 0 -Y 0"/>
+  <arg name="initial_joint_positions" default="-J joint_1 0 -J joint_2 0 -J joint_3 0 -J joint_4 0"/>
+
+  <!-- Iniciar Gazebo con mundo vacío -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gazebo_gui)"/>
+    <arg name="world_name" value="$(arg world_name)"/>
+  </include>
+
+  <!-- Publicador del estado del robot -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+
+  <!-- Parametrizar el URDF -->
+  <param name="robot_description" textfile="$(find robot_arm_urdf)/urdf/robot_arm_urdf.urdf"/>
+
+  <!-- Spawn en Gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param robot_description -model robot $(arg world_pose) $(arg initial_joint_positions)"
+        output="screen"/>
+
+  <!-- Cargar parámetros de control -->
+  <rosparam file="$(find moveit_robot_arm_config)/config/gazebo_controllers.yaml" command="load"/>
+
+  <!-- Lanzar controladores definidos -->
+  <include file="$(dirname)/ros_controllers.launch"/>
+
+  <!-- Spawner con todos los controladores -->
+  <node name="gazebo_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+      args="joint_state_controller robot_arm_controller" />
+
+</launch>
