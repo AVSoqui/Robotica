@@ -1,6 +1,16 @@
 \section{Características del Robot} \label{sec:caracteristicas_del_robot}
 
-En esta parte deben de explicar en una tabla la información principal del robot. Para ello, pueden cambiar el archivo de excel \ffile{Robot\_Resumen.xlsx} que está en \ffolder{tablas} y pedirle a ChatGPT que lo convierta a \LaTeX o simplemente pasarlo a un convertidor en línea.
+Antes de desarrollar la tabla de información principal del robot, se hizo el diagrama de Denavit Hartenberg como guía visual. En este se colocan los ejes Z y X de rotación, así como las distancias de cada eslabón y los tipos de articulación. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/robotFinal.png}
+    \caption{Diagrama DH Robot}
+    \label{fig:robotDH}
+\end{figure}
+
+La tabla de información principal se completa utilizando la regla de la mano derecha para conocer el sentido de cada rotación. Además, se colocan las restricciones para cada articulación, considerando si son rotacionales o prismaticas. 
+\pagebreak
 
 \begin{table}[ht]
 	\centering
@@ -27,13 +37,13 @@ En esta parte deben de explicar en una tabla la información principal del robot
 \begin{description}
 	\item[N] Número de la articulación.
 	\item[\(\theta\)] Ángulo articular (grados).
-	\item[\(d\)] Desplazamiento articular (unidades de longitud).
-	\item[\(a\)] Longitud del eslabón (unidades de longitud).
+	\item[\(d\)] Desplazamiento articular (centímetros).
+	\item[\(a\)] Longitud del eslabón (centímetros).
 	\item[\(\alpha\)] Ángulo de torsión DH (grados).
 	\item[tipo] ‘r’ para articulación rotacional, ‘p’ para prismática.
 	\item[\(q_{\min}\), \(q_{\max}\)] Límites de posición (grados o unidades de desplazamiento).
-	\item[\(\dot q_{\max}\)] Límite de velocidad (grados/s o unidades/s).
-	\item[\(\ddot q_{\max}\)] Límite de aceleración (grados/s² o unidades/s²).
+	\item[\(\dot q_{\max}\)] Límite de velocidad (grados/s).
+	\item[\(\ddot q_{\max}\)] Límite de aceleración (grados/s²).
 	\item[\(\tau\)] Torque o fuerza máxima permitido (\(N \cdot m\) o \(N\)).
 	\item[\(\mu_s\)] Fricción estática (\(N\) o \(N \cdot m\)).
 	\item[\(\mu_k\)] Fricción cinética (\(N \cdot m \cdot s\) o \(\frac{N \cdot m \cdot s}{rad}\)).

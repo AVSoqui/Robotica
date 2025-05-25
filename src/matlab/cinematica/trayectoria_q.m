@@ -56,14 +56,14 @@ for i = 1:robot.NGDL
     % Se utiliza la función (1 - cos(w*t)), la cual oscila entre 0 y 2.
     % De esta forma, en t=0: cos(0)=1 y se cumple q(i,0)=qMin(i).
     % En t = T/2: cos(pi)= -1, por lo que q(i, T/2)=qMin(i) + 2*amplitud = qMax(i).
-    q(i,:) = robot.qMin(i) + amplitud/2 * (1 - cos(w * t));
+    q(i,:) = robot.qMin(i) + amplitud/2 * (1 - cos(w * t))
     
     % Derivada temporal de q: velocidad articular
     % d/dt[1 - cos(w*t)] = w*sin(w*t)
-    dq(i,:) = amplitud/2 * w * sin(w * t);
+    dq(i,:) = amplitud/2 * w * sin(w * t)
     
     % Derivada temporal de dq: aceleración articular
     % d/dt[w*sin(w*t)] = w^2*cos(w*t)
-    ddq(i,:) = amplitud/2 * w^2 * cos(w * t);
+    ddq(i,:) = amplitud/2 * w^2 * cos(w * t)
 end
 end
