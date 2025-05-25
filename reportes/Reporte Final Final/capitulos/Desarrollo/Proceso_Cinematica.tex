@@ -1,0 +1,48 @@
+\section{Proceso de Cinemática} \label{sec:proceso_cinematica}
+
+Aquí explicarán su código. Si quieren mostrar una parte, pueden hacerlo de la siguiente forma
+
+% Si no quieres ponerle título al código, puedes dejarlo en blanco.
+\begin{matlabcode}{matlab}
+	function [q_sol, p_sol] = cinematica_inv(r, p_des, tol, max_iter, alpha, numMuestras)
+\end{matlabcode}
+
+Pero solo háganlo en partes muy específicas (las que van a explicar en ese momento). No copien todo el código ya que eso está en GitHub.
+
+Si les sale el error \texttt{latexminted no se reconoce como un comando interno o externo, programa o archivo por lotes ejecutable}, deben tener instalado python y usar el siguiente comando.
+\begin{terminal}{bash: Instalar minted en python con pip}
+	pip install latexminted==0.5.1
+\end{terminal}
+
+\subsection{Cinemática Directa}
+Primero, se crea una matriz homogenea A0, la cual representará la posición inicial. 
+\begin{matlabcode}{matlab}
+	R_inicial = euler2rotMat(orientacion_inicial, secuencia);
+    Matriz_cero = [0 0 0]
+    A0 = [R_inicial posicion_inicial
+    Matriz_cero 1]
+\end{matlabcode}
+
+Después, utilizando la tabla que contiene los parametros de Denavit Hartenberg y los límites de nuestro robot, establecemos el robot y la trayectoría a seguir.
+
+\begin{matlabcode}{matlab}
+	dh = readtable('datos\tabla_DH\robotFinal.csv');
+    robot = crear_robot(dh,A0);
+
+    periodo = 2;    % Periodo del movimiento cíclico
+    [q,dq,ddq] = trayectoria_q(robot,t,periodo);
+\end{matlabcode}
+En este caso, las articulaciones del robot realizarán un movimiento repetitivo cada 2 segundos, ya que este es el valor definido en el periodo del movimiento cíclico.
+
+Para observar el resultado de la animación y la creación del robot, ir a la \autoref{fig:pruebaDH_robot}
+
+
+\subsection{Cinemática Diferencial}
+Explicar las partes importantes del código de la cinemática diferencial.
+Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
+
+
+\subsection{Cinemática Inversa}
+Explicar las partes importantes del código de la cinemática inversa.
+Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
+
