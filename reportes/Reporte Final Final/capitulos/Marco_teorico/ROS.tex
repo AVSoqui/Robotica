@@ -56,5 +56,34 @@ Un mensaje en ROS se define a través de archivos .msg, que especifican sus camp
 \end{itemize}
 
 \subsection{Servicio (Service)}
+En ROS, un servicio es un mecanismo de comunicación sincrónica entre nodos. A diferencia de los tópicos, que son asíncronos y se utilizan para flujos continuos de datos, los servicios están diseñados para peticiones puntuales, donde un nodo solicita información o una acción específica, y otro nodo responde con un resultado.
+Se puede comparar con una llamada a función remota: un nodo “cliente” hace una solicitud, y un nodo “servidor” la atiende y responde.
+\begin{itemize}
+    \item \textbf{Request:} Lo que el cliente envia al servidor
+    \item \textbf{Response:} Lo que el servidor le devuelve al cliente.
+\end{itemize}
+\item \textbf{Caracteristicas del servicio (service):}
+ Los servicios en ROS se caracterizan por ser un mecanismo de comunicación sincrónica que permite la interacción directa entre dos nodos: uno que actúa como cliente y otro como servidor. Esta forma de comunicación se basa en un modelo de petición-respuesta, donde el nodo cliente envía una solicitud específica al servidor, y este responde con los datos o resultados correspondientes.
+A diferencia de los tópicos, que permiten una transmisión continua de datos entre múltiples nodos mediante un canal asíncrono, los servicios están diseñados para situaciones en las que se requiere una operación puntual, como solicitar el estado de un sensor, mover un actuador a una posición determinada o iniciar un proceso. La comunicación es uno a uno, y está diseñada para ser bloqueante, es decir, el cliente espera a recibir una respuesta antes de continuar con su ejecución.
 \subsection{Gazebo}
+Gazebo y ROS forman una combinación poderosa para el desarrollo y prueba de sistemas robóticos. Mientras ROS proporciona la infraestructura de comunicación entre nodos, controladores, sensores y algoritmos, Gazebo actúa como un entorno virtual donde estos elementos pueden probarse sin necesidad de hardware físico.
+La integración entre ambos sistemas se logra mediante paquetes específicos, como gazebo-ros, que permiten que un robot simulado en Gazebo se comporte como si estuviera en el mundo real bajo el control de ROS. Esta relación se basa principalmente en la comunicación mediante:
+\begin{itemize}
+    \item \textbf{Topic ROS:} Por ejemplo, se pueden publicar comandos de velocidad (/cmz-vel) desde un nodo ROS, y Gazebo los interpreta para mover un robot simulado. Igualmente, sensores virtuales en Gazebo publican datos que otros nodos de ROS pueden utilizar.
+    \item \textbf{Service ROS:} Gazebo puede exponer servicios que permiten reiniciar la simulación, agregar o eliminar modelos, y controlar el tiempo de simulación.
+    \item \textbf{Mensajes personalizados y parámetros:} Se usan para sincronizar configuraciones y estructuras de datos entre el simulador y los nodos ROS.
+    \item \textbf{Plugins:} Son módulos escritos en C++ o Python que permiten extender las capacidades de Gazebo y conectar directamente con ROS. Por ejemplo, hay plugins para controlar los actuadores, simular sensores, o aplicar fuerzas específicas al modelo del robot.
+\end{itemize}
 \subsection{RViz}
+RViz es una herramienta de visualización 3D que forma parte integral del ecosistema de ROS. Su principal función es permitir al usuario observar, interpretar y depurar en tiempo real los datos que se generan en un sistema robótico controlado por ROS.
+RViz no ejecuta simulaciones físicas como Gazebo, sino que visualiza los datos que se intercambian entre los nodos ROS: posiciones, sensores, trayectorias, mapas, modelos de robot, etc. Gracias a esto, RViz se convierte en una herramienta esencial para monitorear y comprender el comportamiento del robot durante el desarrollo, prueba y operación de algoritmos.
+
+\textbf{¿Que puede visualizar RViz?:}
+\begin{itemize}
+    \item Modelos 3D de robots definidos en URDF o xacro.
+    \item Posiciones y orientaciones (TF) de todos los marcos de referencia de un sistema robótico.
+    \item Nubes de puntos generadas por sensores LIDAR o RGB-D.
+    \item Lecturas de sensores, como cámaras, láseres o sonares.
+    \item Trayectorias planeadas por algoritmos de navegación o planificación de movimiento.
+    \item Etc.
+\end{itemize}
