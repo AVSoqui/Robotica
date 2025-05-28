@@ -1,17 +1,57 @@
 \section{Dinámica} \label{sec:dinamica}
 
-La verdad, no les expliqué mucho sobre esta unidad, pero pueden hablar sobre las ecuaciones que vienen en el powerpoint (el cual subí tarde porque se me corrompió)
+El análisis dinámico de un robot es fundamental para entender cómo las fuerzas internas y externas afectan su movimiento. A diferencia de la cinemática, que solo considera la geometría del movimiento, la dinámica toma en cuenta las masas, fuerzas, y torques involucrados. El modelo dinámico estándar de un robot manipulador se describe mediante la ecuación:
 
-Hablen sobre el modelo dinámico estandar de un robot, la matriz de masa o inercia, la matriz de coriolis y el vector de gravedad. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{img/Ecuacion Dinamica.jpeg}
+    \caption{Ecuacion Dinamica}
+    \label{fig:Ecuacion Dinamica}
+\end{figure}
+
+\textbf{Donde:}
+\begin{itemize}
+    \item T es el vector de torques articulares datos de un sensor ultrasónico o una cámara.
+    \item q son el vector de posición, velocidad y aceleración articular
+    \item M(q) es la matriz de masa o inercia
+    \item C(q) es la matriz de Coriolis y centrífuga
+    \item G(q) es el vector de gravedad
+    \item F(q) representa las fuerzas de fricción
+    \item Son las perturbaciones externas
+\end{itemize}
 
 \subsection{Matriz de masa o inercia}
-Expliquen cómo el vector de masa o inercia define la aceleración máxima.
+La matriz de masa o inercia M(q) representa cómo las masas de los eslabones del robot afectan la respuesta dinámica al aplicar una aceleración. Esta matriz es simétrica, positiva definida y varía con la configuración articular del robot.
+
+El vector de inercia determina la aceleración máxima que el sistema puede alcanzar ante una fuerza o torque dado. Si el robot se encuentra en una configuración en la que la inercia es alta por ejemplo, cuando sus eslabones están extendidos, se requerirá un mayor torque para producir una misma aceleración. Por tanto, esta matriz es clave para diseñar controladores eficientes y para limitar esfuerzos mecánicos en el sistema.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Siempre es simétrica y positiva definida.
+    \item Si el robot está en una configuración compleja (por ejemplo, extendido), la matriz tendrá valores grandes que reflejan mayor esfuerzo para moverse.
+\end{itemize}
 
 \subsection{Matriz de coriolis}
+La matriz de Coriolis y fuerzas centrífugas C(q) tiene en cuenta los efectos de las velocidades articulares sobre el sistema dinámico. Cuando el robot se mueve, estas fuerzas influyen en la trayectoria y deben ser compensadas por el controlador para evitar desviaciones.
+
+Este término incluye tanto efectos de Coriolis (aceleraciones cruzadas por interacción entre ejes) como centrífugos (aceleraciones debidas a rotaciones propias). Una mala compensación puede generar inestabilidad, especialmente a altas velocidades.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Cuando una articulación se mueve, puede afectar a otras articulaciones por ejemplo, girar un eslabón genera inercia que influye en otros.
+    \item El controlador necesita contrarrestar estas fuerzas para que el robot no se desvíe.
+\end{itemize}
 
 \subsection{Vector de gravedad}
+El vector de gravedad G(q) representa las fuerzas que actúan sobre los eslabones del robot debido al peso y la orientación con respecto al campo gravitacional. Este vector varía con la configuración articular, y su efecto máximo ocurre cuando el robot está extendido horizontalmente.
 
-Expliquen por qué el vector de gravedad en su valor máximo (cuando el robot está extendido horizontalmente) debe ser contrarrestado con la fuerza de cada motor
+En esta configuración, el brazo actúa como una palanca, y el peso de cada segmento genera un momento adicional que debe ser contrarrestado por los motores. Si no se consideran estas fuerzas, el robot puede colapsar o no mantener la posición deseada. Por lo tanto, el sistema de control debe aplicar torques equivalentes para equilibrar el efecto del peso, especialmente en manipuladores de carga útil significativa. Es un vector de tamaño n x 1 que depende de la configuracion del robot.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Te dice cuánto torque debe aplicar cada motor para sostener su parte del robot contra la gravedad.
+    \item Si no lo haces, el robot se "cae" o se va hacia abajo por la acción de la gravedad.
+\end{itemize}
 
 \subsection{Fricción}
 Expliquen qué es la fricción en general.
