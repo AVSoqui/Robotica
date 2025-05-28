@@ -32,10 +32,26 @@ El vector de inercia determina la aceleración máxima que el sistema puede alca
 \end{itemize}
 
 \subsection{Matriz de coriolis}
+La matriz de Coriolis y fuerzas centrífugas C(q) tiene en cuenta los efectos de las velocidades articulares sobre el sistema dinámico. Cuando el robot se mueve, estas fuerzas influyen en la trayectoria y deben ser compensadas por el controlador para evitar desviaciones.
+
+Este término incluye tanto efectos de Coriolis (aceleraciones cruzadas por interacción entre ejes) como centrífugos (aceleraciones debidas a rotaciones propias). Una mala compensación puede generar inestabilidad, especialmente a altas velocidades.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Cuando una articulación se mueve, puede afectar a otras articulaciones por ejemplo, girar un eslabón genera inercia que influye en otros.
+    \item El controlador necesita contrarrestar estas fuerzas para que el robot no se desvíe.
+\end{itemize}
 
 \subsection{Vector de gravedad}
+El vector de gravedad G(q) representa las fuerzas que actúan sobre los eslabones del robot debido al peso y la orientación con respecto al campo gravitacional. Este vector varía con la configuración articular, y su efecto máximo ocurre cuando el robot está extendido horizontalmente.
 
-Expliquen por qué el vector de gravedad en su valor máximo (cuando el robot está extendido horizontalmente) debe ser contrarrestado con la fuerza de cada motor
+En esta configuración, el brazo actúa como una palanca, y el peso de cada segmento genera un momento adicional que debe ser contrarrestado por los motores. Si no se consideran estas fuerzas, el robot puede colapsar o no mantener la posición deseada. Por lo tanto, el sistema de control debe aplicar torques equivalentes para equilibrar el efecto del peso, especialmente en manipuladores de carga útil significativa. Es un vector de tamaño n x 1 que depende de la configuracion del robot.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Te dice cuánto torque debe aplicar cada motor para sostener su parte del robot contra la gravedad.
+    \item Si no lo haces, el robot se "cae" o se va hacia abajo por la acción de la gravedad.
+\end{itemize}
 
 \subsection{Fricción}
 Expliquen qué es la fricción en general.
