@@ -1,49 +1,64 @@
 \section{Dinámica} \label{sec:dinamica}
 
-La dinámica en robótica estudia las fuerzas y torques que actúan sobre un manipulador, así como su efecto en el movimiento del mismo. Mientras que la cinemática se enfoca únicamente en la descripción del movimiento sin considerar sus causas, la dinámica permite comprender por qué y cómo un robot se mueve, considerando propiedades físicas como masa, inercia, gravedad, fricción y perturbaciones externas.
-
-El modelo dinámico estándar de un robot se expresa mediante una ecuación de segundo orden en función del tiempo:
+El análisis dinámico de un robot es fundamental para entender cómo las fuerzas internas y externas afectan su movimiento. A diferencia de la cinemática, que solo considera la geometría del movimiento, la dinámica toma en cuenta las masas, fuerzas, y torques involucrados. El modelo dinámico estándar de un robot manipulador se describe mediante la ecuación:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{img/ModeloDinamico.jpg}
-    \caption{Diagrama DH Robot}
-    \label{fig:robotDH}
+    \includegraphics[width=0.75\textwidth]{img/Ecuacion Dinamica.jpeg}
+    \caption{Ecuacion Dinamica}
+    \label{fig:Ecuacion Dinamica}
 \end{figure}
 
-\subsection{Matriz de masa o inercia}
-La matriz de masa o matriz de inercia representa cómo la masa del sistema se distribuye a lo largo de sus eslabones. Esta matriz es simétrica y positiva definida, y varía con la configuración q del robot. Está construida a partir de la masa de cada eslabón, su centro de masa y su tensor de inercia, según la dinámica derivada por métodos como Euler-Lagrange o Newton-Euler.
+\textbf{Donde:}
+\begin{itemize}
+    \item T es el vector de torques articulares datos de un sensor ultrasónico o una cámara.
+    \item q son el vector de posición, velocidad y aceleración articular
+    \item M(q) es la matriz de masa o inercia
+    \item C(q) es la matriz de Coriolis y centrífuga
+    \item G(q) es el vector de gravedad
+    \item F(q) representa las fuerzas de fricción
+    \item Son las perturbaciones externas
+\end{itemize}
 
-Esta matriz define la relación entre las aceleraciones articulares y los torques aplicados. En otras palabras, describe cuánta fuerza se necesita para lograr una aceleración deseada, dependiendo de la distribución de masa del robot.
+\subsection{Matriz de masa o inercia}
+La matriz de masa o inercia M(q) representa cómo las masas de los eslabones del robot afectan la respuesta dinámica al aplicar una aceleración. Esta matriz es simétrica, positiva definida y varía con la configuración articular del robot.
+
+El vector de inercia determina la aceleración máxima que el sistema puede alcanzar ante una fuerza o torque dado. Si el robot se encuentra en una configuración en la que la inercia es alta por ejemplo, cuando sus eslabones están extendidos, se requerirá un mayor torque para producir una misma aceleración. Por tanto, esta matriz es clave para diseñar controladores eficientes y para limitar esfuerzos mecánicos en el sistema.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Siempre es simétrica y positiva definida.
+    \item Si el robot está en una configuración compleja (por ejemplo, extendido), la matriz tendrá valores grandes que reflejan mayor esfuerzo para moverse.
+\end{itemize}
 
 \subsection{Matriz de coriolis}
-La matriz de Coriolis y centrífuga representa las fuerzas inerciales que surgen cuando el robot se encuentra en movimiento, especialmente en presencia de articulaciones rotacionales múltiples. Estas fuerzas dependen de la velocidad y afectan el torque requerido incluso si no se desea cambiar la aceleración del sistema.
+La matriz de Coriolis y fuerzas centrífugas C(q) tiene en cuenta los efectos de las velocidades articulares sobre el sistema dinámico. Cuando el robot se mueve, estas fuerzas influyen en la trayectoria y deben ser compensadas por el controlador para evitar desviaciones.
 
-Estas fuerzas pueden causar desviaciones en la trayectoria si no se compensan adecuadamente. Su consideración es fundamental para lograr controladores precisos en movimientos rápidos o en robots con múltiples grados de libertad.
+Este término incluye tanto efectos de Coriolis (aceleraciones cruzadas por interacción entre ejes) como centrífugos (aceleraciones debidas a rotaciones propias). Una mala compensación puede generar inestabilidad, especialmente a altas velocidades.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Cuando una articulación se mueve, puede afectar a otras articulaciones por ejemplo, girar un eslabón genera inercia que influye en otros.
+    \item El controlador necesita contrarrestar estas fuerzas para que el robot no se desvíe.
+\end{itemize}
 
 \subsection{Vector de gravedad}
-El vector de gravedad representa los torques necesarios para mantener el robot en equilibrio frente a la fuerza de gravedad. Este vector depende exclusivamente de la configuración, ya que el peso de cada eslabón genera un torque diferente dependiendo de su orientación.
-Al momento de que el robot esta en horizontal es critico este ya que el brazo actúa como una palanca, generando el máximo torque gravitacional sobre las articulaciones cercanas a la base. Esto representa la configuración más exigente para los actuadores, ya que deben ejercer un torque considerable simplemente para sostener el peso del sistema.
+El vector de gravedad G(q) representa las fuerzas que actúan sobre los eslabones del robot debido al peso y la orientación con respecto al campo gravitacional. Este vector varía con la configuración articular, y su efecto máximo ocurre cuando el robot está extendido horizontalmente.
 
-Por ello, es indispensable que el diseño del controlador incluya compensación de gravedad, especialmente en manipuladores que operan en distintas orientaciones o que levantan objetos pesados.
+En esta configuración, el brazo actúa como una palanca, y el peso de cada segmento genera un momento adicional que debe ser contrarrestado por los motores. Si no se consideran estas fuerzas, el robot puede colapsar o no mantener la posición deseada. Por lo tanto, el sistema de control debe aplicar torques equivalentes para equilibrar el efecto del peso, especialmente en manipuladores de carga útil significativa. Es un vector de tamaño n x 1 que depende de la configuracion del robot.
+
+\textbf{Propiedades:}
+\begin{itemize}
+    \item Te dice cuánto torque debe aplicar cada motor para sostener su parte del robot contra la gravedad.
+    \item Si no lo haces, el robot se "cae" o se va hacia abajo por la acción de la gravedad.
+\end{itemize}
 
 \subsection{Fricción}
-La fricción es una fuerza que se opone al movimiento relativo entre dos superficies en contacto. En robótica, afecta tanto la eficiencia del movimiento como la precisión en el seguimiento de trayectorias.
+Expliquen qué es la fricción en general.
 
 \subsubsection{Fricción estática o seca}
-Ocurre cuando el robot está en reposo y requiere una fuerza mínima para iniciar el movimiento. Es responsable de que el sistema necesite un "empuje inicial" para superar la inercia del reposo. Su magnitud no depende de la velocidad, sino del estado (reposo/movimiento).
 
 \subsubsection{Fricción dinámica o viscosa}
-Se manifiesta una vez que el movimiento ha comenzado. Es proporcional a la velocidad del sistema y puede modelarse como:
-donde B es una matriz de coeficientes de fricción viscosa.
-Ambos tipos de fricción deben considerarse en el diseño del controlador, ya que si se ignoran, pueden provocar oscilaciones, errores de posicionamiento o sobreesfuerzos en los actuadores.
 
 \subsection{Perturbaciones}
-
-Las perturbaciones son influencias externas o internas no previstas que alteran el comportamiento esperado del sistema. En robótica, pueden ser:
-
-Internas: imperfecciones en el modelo, desgaste mecánico, variaciones en la fricción o en el centro de masa.
-
-Externas: colisiones, contacto con objetos, viento, cargas imprevistas, etc.
-
-Aunque no se profundiza en ellas, es importante reconocer que todo sistema robótico real estará expuesto a perturbaciones. Por ello, los controladores modernos suelen incorporar mecanismos de compensación o adaptación para mantener la estabilidad y precisión ante estos efectos.
+Aquí expliquen qué es una perturbación en general sin profundizar mucho.
