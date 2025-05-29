@@ -37,6 +37,8 @@ dt = 0.05;
 
 for k = 1:length(t)
 
+    robot = actualizar_robot_completo(robot, q(:,k));  % <<-- ESTA LÍNEA ES CLAVE
+
     pos(:,k) = robot.T(1:3,4,end);
     R(:,:,k) = robot.T(1:3,1:3,end);
 
@@ -54,12 +56,4 @@ for k = 1:length(t)
 
     a_l(:,k) = Jv(:,:,k)*ddq(:,k) + dJv(:,:,k)*dq(:,k);
     a_r(:,k) = Jw(:,:,k)*ddq(:,k) + dJw(:,:,k)*dq(:,k);
-
 end
-
-
-
-
-
-
-

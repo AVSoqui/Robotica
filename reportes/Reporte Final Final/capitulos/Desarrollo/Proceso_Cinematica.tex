@@ -1,18 +1,6 @@
 \section{Proceso de Cinemática} \label{sec:proceso_cinematica}
 
-Aquí explicarán su código. Si quieren mostrar una parte, pueden hacerlo de la siguiente forma
-
-% Si no quieres ponerle título al código, puedes dejarlo en blanco.
-\begin{matlabcode}{matlab}
-	function [q_sol, p_sol] = cinematica_inv(r, p_des, tol, max_iter, alpha, numMuestras)
-\end{matlabcode}
-
-Pero solo háganlo en partes muy específicas (las que van a explicar en ese momento). No copien todo el código ya que eso está en GitHub.
-
-Si les sale el error \texttt{latexminted no se reconoce como un comando interno o externo, programa o archivo por lotes ejecutable}, deben tener instalado python y usar el siguiente comando.
-\begin{terminal}{bash: Instalar minted en python con pip}
-	pip install latexminted==0.5.1
-\end{terminal}
+A continuación, se explica el código realizado en Matlab para el proceso de cinemática directa, diferencial e inversa. 
 
 \subsection{Cinemática Directa}
 Primero, se crea una matriz homogenea A0, la cual representará la posición inicial. 
@@ -38,11 +26,88 @@ Para observar el resultado de la animación y la creación del robot, ir a la \a
 
 
 \subsection{Cinemática Diferencial}
-Explicar las partes importantes del código de la cinemática diferencial.
-Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
 
+Para calcular el jacobiano geométrico, primero se actualiza la configuración del robot con los valores articulares. En este se crean arrays de 4x4xn, los cuales representan todas las Transformaciones Globales desde la base hasta el efector final.
+
+\begin{matlabcode}{actualizar robot}
+	for i = 1:robot.NGDL
+        A = HRz(robot.theta(i)) * HTz(robot.d(i)) * HTx(robot.a(i)) * HRx(robot.alpha(i));
+        if i == 1
+            robot.T(:,:,1) = A0*A;
+        else
+            robot.T(:,:,i) = robot.T(:,:,i-1)*A;
+    end
+end
+\end{matlabcode}
+
+Después, se obtiene la posición y orientación del efector final, así como la orientación en ángulos de Euler. Se utiliza el jacobiano para calcular la velocidad lineal y angular, y la derivada en base al tiempo del jacobiano para calcular la aceleración lineal y angular. 
+
+Se utilizan las transformaciones T para construir columna por columna el jacobiano geométrico, distinguiendo entre articulaciones rotacionales y prismáticas.
+
+\begin{matlabcode}{Jacobiano Geométrico}
+	for i = 1:NGDL
+        if i == 1
+            p_prev = p0;
+            z_prev = z0;
+        else
+            p_prev = T(1:3, 4, i-1);    % Origen del marco (i-1)
+            z_prev = T(1:3, 3, i-1);    % Eje z del marco (i-1)
+        end
+
+        switch tipo(i)
+            case 'r'
+                Jv(:, i) = cross(z_prev, p_end - p_prev);
+                Jw(:, i) = z_prev;
+            case 'p'
+                Jv(:, i) = z_prev;
+                Jw(:, i) = [0; 0; 0];
+            otherwise
+                error("Debes usar 'r' para una articulación de revoluta" + ...
+                  " y 'p' para una articulación prismática.")
+        end
+    end
+
+\end{matlabcode}
 
 \subsection{Cinemática Inversa}
-Explicar las partes importantes del código de la cinemática inversa.
-Para ver los resultados, ir al \autoref{chap:resultados}: Resultados, o determinada figura.
 
+Al igual que en la cinemática directa y diferencial, se crea la estructura del robot con la tabla DH, así como se define la trayectoria que seguirá la simulación del robot. Esta trayectoria consiste en diferentes puntos con coordenadas en X, Y, Z. 
+
+Primero, se generan numMuestras de configuraciones articulares aleatorias distribuidas dentro de los límites de las uniones. Luego, ordena los candidatos por cercanía al objetivo, calculando el error entre la posición deseada y el punto deseado.  
+
+\begin{matlabcode}{Espacio articular}
+	X = olhsdesign(n, numMuestras); 
+    q_candidatas = r.qMin + diag(r.qMax - r.qMin) * X;
+\end{matlabcode}
+
+Después, se usa el jacobiano translacional para mover las articulaciones en dirección a reducir el error de posición. Además, se utiliza la pseudoinversa amortiguada para evitar problemas en configuraciones cercanas a singularidades. 
+
+\begin{matlabcode}{Descenso del gradiente}
+	while (errors(j) > tol) && (i < max_iter)
+    [Jv, ~] = jac_geometrico_completo(r);
+    J_damped = Jv' / (Jv * Jv' + lambda^2 * eye(size(Jv,1)));  % pseudoinversa amortiguada
+    e_q = alpha * J_damped * e_p;
+    q_candidata = saturar(q_candidata + e_q, r.qMin, r.qMax);
+\end{matlabcode}
+
+Si alguna solución llega a un error suficientemente bajo, se acepta y se retorna. Si ninguna solución cumple la tolerancia, se elige la más cercana, aunque no se llegue exactamente al punto.
+
+\begin{matlabcode}{Elección de solución}
+	if errors(j) <= tol
+        q_sol = q_candidata;
+        p_sol = r.T(1:3,4,end);
+        return;
+    end
+\end{matlabcode}
+
+Por último, se genera una trayectoria suave y viable entre dos configuraciones articulares respetando los límites cinemáticos del robot.
+
+\begin{matlabcode}{Elección de solución}
+    delta_q = abs(q_sol(:,2) - q_sol(:,1));
+    t_final = max(2 * delta_q ./ robot.dqMax);
+    numSamples = 201;
+    
+    [q, dq, ddq, t, pp] = trapveltraj(q_sol, numSamples, ...
+                                                'Acceleration', robot.ddqMax, ...
+                                                'EndTime', t_final);
+\end{matlabcode}
