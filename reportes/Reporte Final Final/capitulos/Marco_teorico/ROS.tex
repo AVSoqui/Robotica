@@ -19,10 +19,71 @@ Un nodo como componente modular es una de las grandes ventajas de ROS es su arqu
     \item Un nodo de navegación puede estar trazando rutas o evitando obstáculos.
 \end{itemize}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/NODOS ROS.jpeg}
+	\caption{Nodos de ROS}
+	\label{fig:NODOS ROS}
+\end{figure}
 
+En el entorno de ROS (Robot Operating System), la comunicación entre los distintos procesos que ejecutan tareas en un sistema robótico se establece a través de nodos, los cuales interactúan entre sí mediante un mecanismo de publicación y suscripción sobre un canal común denominado tópico. Cada nodo representa una unidad funcional autónoma que puede actuar como publicador (publisher), suscriptor (subscriber), o ambos.
+
+En este esquema, un nodo publicador se encarga de generar información —como lecturas de sensores, comandos de movimiento, datos de estado, entre otros— y enviarla a un tópico específico. Dicha información es encapsulada en estructuras denominadas mensajes, que se transmiten de forma asíncrona. Por su parte, cualquier nodo que necesite esta información puede suscribirse al mismo tópico, recibiendo automáticamente los mensajes enviados por el publicador.
+
+Esta arquitectura desacoplada permite que múltiples nodos puedan recibir datos de un solo publicador sin que exista una conexión directa entre ellos, fomentando así la modularidad, escalabilidad y flexibilidad del sistema. Además, esta relación facilita la implementación de sistemas distribuidos, ya que los nodos pueden ejecutarse en distintas máquinas mientras se comunican a través de los mismos tópicos.
 
 \subsection{Tema (Topic)}
+En ROS (Robot Operating System), un tópico es un canal de comunicación que permite la transmisión de datos entre nodos de manera asíncrona. Funciona como un "espacio común" donde los nodos publican y suscriben mensajes. Es uno de los mecanismos más usados en ROS para el intercambio de información en tiempo real, debido a su simplicidad, eficiencia y escalabilidad.
+
+
+\textbf{Comunicacion basada en "topics"}
+
+El sistema de comunicación por tópicos sigue un modelo publicador/suscriptor:
+\begin{itemize}
+    \item Un nodo que publica datos (por ejemplo, las lecturas de un sensor) lo hace hacia un tópico específico.
+    \item Otro nodo, que se suscribe a ese mismo tópico, recibe los datos sin necesidad de conocer directamente al publicador.
+\end{itemize}
+
+
 \subsection{Mensaje (Message)}
+En ROS (Robot Operating System), un mensaje es la unidad básica de datos que se intercambia entre nodos a través de un tópico. Cada mensaje es una estructura de datos predefinida y organizada, que permite la comunicación entre procesos distribuidos en un sistema robótico.
+Los mensajes permiten transmitir información específica como posiciones, velocidades, imágenes o datos de sensores entre los diferentes componentes del sistema, de manera estandarizada y eficiente.
+Un mensaje en ROS se define a través de archivos .msg, que especifican sus campos y tipos de datos. Estos pueden ser:
+\begin{itemize}
+    \item \textbf{Tipos primitivos:} int32, float64, bool, string, etc.
+    \item \textbf{Tipos compuestos:} Estructuras definidas por otros mensajes.
+    \item \textbf{Arreglos o listas:} De tipo primitivo o compuesto
+\end{itemize}
+
 \subsection{Servicio (Service)}
+En ROS, un servicio es un mecanismo de comunicación sincrónica entre nodos. A diferencia de los tópicos, que son asíncronos y se utilizan para flujos continuos de datos, los servicios están diseñados para peticiones puntuales, donde un nodo solicita información o una acción específica, y otro nodo responde con un resultado.
+Se puede comparar con una llamada a función remota: un nodo “cliente” hace una solicitud, y un nodo “servidor” la atiende y responde.
+\begin{itemize}
+    \item \textbf{Request:} Lo que el cliente envia al servidor
+    \item \textbf{Response:} Lo que el servidor le devuelve al cliente.
+\end{itemize}
+\item \textbf{Caracteristicas del servicio (service):}
+ Los servicios en ROS se caracterizan por ser un mecanismo de comunicación sincrónica que permite la interacción directa entre dos nodos: uno que actúa como cliente y otro como servidor. Esta forma de comunicación se basa en un modelo de petición-respuesta, donde el nodo cliente envía una solicitud específica al servidor, y este responde con los datos o resultados correspondientes.
+A diferencia de los tópicos, que permiten una transmisión continua de datos entre múltiples nodos mediante un canal asíncrono, los servicios están diseñados para situaciones en las que se requiere una operación puntual, como solicitar el estado de un sensor, mover un actuador a una posición determinada o iniciar un proceso. La comunicación es uno a uno, y está diseñada para ser bloqueante, es decir, el cliente espera a recibir una respuesta antes de continuar con su ejecución.
 \subsection{Gazebo}
+Gazebo y ROS forman una combinación poderosa para el desarrollo y prueba de sistemas robóticos. Mientras ROS proporciona la infraestructura de comunicación entre nodos, controladores, sensores y algoritmos, Gazebo actúa como un entorno virtual donde estos elementos pueden probarse sin necesidad de hardware físico.
+La integración entre ambos sistemas se logra mediante paquetes específicos, como gazebo-ros, que permiten que un robot simulado en Gazebo se comporte como si estuviera en el mundo real bajo el control de ROS. Esta relación se basa principalmente en la comunicación mediante:
+\begin{itemize}
+    \item \textbf{Topic ROS:} Por ejemplo, se pueden publicar comandos de velocidad (/cmz-vel) desde un nodo ROS, y Gazebo los interpreta para mover un robot simulado. Igualmente, sensores virtuales en Gazebo publican datos que otros nodos de ROS pueden utilizar.
+    \item \textbf{Service ROS:} Gazebo puede exponer servicios que permiten reiniciar la simulación, agregar o eliminar modelos, y controlar el tiempo de simulación.
+    \item \textbf{Mensajes personalizados y parámetros:} Se usan para sincronizar configuraciones y estructuras de datos entre el simulador y los nodos ROS.
+    \item \textbf{Plugins:} Son módulos escritos en C++ o Python que permiten extender las capacidades de Gazebo y conectar directamente con ROS. Por ejemplo, hay plugins para controlar los actuadores, simular sensores, o aplicar fuerzas específicas al modelo del robot.
+\end{itemize}
 \subsection{RViz}
+RViz es una herramienta de visualización 3D que forma parte integral del ecosistema de ROS. Su principal función es permitir al usuario observar, interpretar y depurar en tiempo real los datos que se generan en un sistema robótico controlado por ROS.
+RViz no ejecuta simulaciones físicas como Gazebo, sino que visualiza los datos que se intercambian entre los nodos ROS: posiciones, sensores, trayectorias, mapas, modelos de robot, etc. Gracias a esto, RViz se convierte en una herramienta esencial para monitorear y comprender el comportamiento del robot durante el desarrollo, prueba y operación de algoritmos.
+
+\textbf{¿Que puede visualizar RViz?:}
+\begin{itemize}
+    \item Modelos 3D de robots definidos en URDF o xacro.
+    \item Posiciones y orientaciones (TF) de todos los marcos de referencia de un sistema robótico.
+    \item Nubes de puntos generadas por sensores LIDAR o RGB-D.
+    \item Lecturas de sensores, como cámaras, láseres o sonares.
+    \item Trayectorias planeadas por algoritmos de navegación o planificación de movimiento.
+    \item Etc.
+\end{itemize}

@@ -1,24 +1,49 @@
 \section{Dinámica} \label{sec:dinamica}
 
-La verdad, no les expliqué mucho sobre esta unidad, pero pueden hablar sobre las ecuaciones que vienen en el powerpoint (el cual subí tarde porque se me corrompió)
+La dinámica en robótica estudia las fuerzas y torques que actúan sobre un manipulador, así como su efecto en el movimiento del mismo. Mientras que la cinemática se enfoca únicamente en la descripción del movimiento sin considerar sus causas, la dinámica permite comprender por qué y cómo un robot se mueve, considerando propiedades físicas como masa, inercia, gravedad, fricción y perturbaciones externas.
 
-Hablen sobre el modelo dinámico estandar de un robot, la matriz de masa o inercia, la matriz de coriolis y el vector de gravedad. 
+El modelo dinámico estándar de un robot se expresa mediante una ecuación de segundo orden en función del tiempo:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{img/ModeloDinamico.jpg}
+    \caption{Diagrama DH Robot}
+    \label{fig:robotDH}
+\end{figure}
 
 \subsection{Matriz de masa o inercia}
-Expliquen cómo el vector de masa o inercia define la aceleración máxima.
+La matriz de masa o matriz de inercia representa cómo la masa del sistema se distribuye a lo largo de sus eslabones. Esta matriz es simétrica y positiva definida, y varía con la configuración q del robot. Está construida a partir de la masa de cada eslabón, su centro de masa y su tensor de inercia, según la dinámica derivada por métodos como Euler-Lagrange o Newton-Euler.
+
+Esta matriz define la relación entre las aceleraciones articulares y los torques aplicados. En otras palabras, describe cuánta fuerza se necesita para lograr una aceleración deseada, dependiendo de la distribución de masa del robot.
 
 \subsection{Matriz de coriolis}
+La matriz de Coriolis y centrífuga representa las fuerzas inerciales que surgen cuando el robot se encuentra en movimiento, especialmente en presencia de articulaciones rotacionales múltiples. Estas fuerzas dependen de la velocidad y afectan el torque requerido incluso si no se desea cambiar la aceleración del sistema.
+
+Estas fuerzas pueden causar desviaciones en la trayectoria si no se compensan adecuadamente. Su consideración es fundamental para lograr controladores precisos en movimientos rápidos o en robots con múltiples grados de libertad.
 
 \subsection{Vector de gravedad}
+El vector de gravedad representa los torques necesarios para mantener el robot en equilibrio frente a la fuerza de gravedad. Este vector depende exclusivamente de la configuración, ya que el peso de cada eslabón genera un torque diferente dependiendo de su orientación.
+Al momento de que el robot esta en horizontal es critico este ya que el brazo actúa como una palanca, generando el máximo torque gravitacional sobre las articulaciones cercanas a la base. Esto representa la configuración más exigente para los actuadores, ya que deben ejercer un torque considerable simplemente para sostener el peso del sistema.
 
-Expliquen por qué el vector de gravedad en su valor máximo (cuando el robot está extendido horizontalmente) debe ser contrarrestado con la fuerza de cada motor
+Por ello, es indispensable que el diseño del controlador incluya compensación de gravedad, especialmente en manipuladores que operan en distintas orientaciones o que levantan objetos pesados.
 
 \subsection{Fricción}
-Expliquen qué es la fricción en general.
+La fricción es una fuerza que se opone al movimiento relativo entre dos superficies en contacto. En robótica, afecta tanto la eficiencia del movimiento como la precisión en el seguimiento de trayectorias.
 
 \subsubsection{Fricción estática o seca}
+Ocurre cuando el robot está en reposo y requiere una fuerza mínima para iniciar el movimiento. Es responsable de que el sistema necesite un "empuje inicial" para superar la inercia del reposo. Su magnitud no depende de la velocidad, sino del estado (reposo/movimiento).
 
 \subsubsection{Fricción dinámica o viscosa}
+Se manifiesta una vez que el movimiento ha comenzado. Es proporcional a la velocidad del sistema y puede modelarse como:
+donde B es una matriz de coeficientes de fricción viscosa.
+Ambos tipos de fricción deben considerarse en el diseño del controlador, ya que si se ignoran, pueden provocar oscilaciones, errores de posicionamiento o sobreesfuerzos en los actuadores.
 
 \subsection{Perturbaciones}
-Aquí expliquen qué es una perturbación en general sin profundizar mucho.
+
+Las perturbaciones son influencias externas o internas no previstas que alteran el comportamiento esperado del sistema. En robótica, pueden ser:
+
+Internas: imperfecciones en el modelo, desgaste mecánico, variaciones en la fricción o en el centro de masa.
+
+Externas: colisiones, contacto con objetos, viento, cargas imprevistas, etc.
+
+Aunque no se profundiza en ellas, es importante reconocer que todo sistema robótico real estará expuesto a perturbaciones. Por ello, los controladores modernos suelen incorporar mecanismos de compensación o adaptación para mantener la estabilidad y precisión ante estos efectos.

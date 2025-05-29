@@ -1,0 +1,25 @@
+<launch>
+  <!-- Argumentos opcionales -->
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0.1"/>
+
+  <!-- URDF -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find robot_arm_urdf)/urdf/robot_arm_urdf.urdf'" />
+
+  <!-- Mundo vacío de Gazebo -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+  <!-- Spawn del modelo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model robot_arm -x $(arg x) -y $(arg y) -z $(arg z)" />
+
+  <!-- Publicador de estado -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- Carga y lanza controladores -->
+  <rosparam file="$(find robot_arm_urdf)/config/joint_trajectory_controller.yaml" command="load"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        args="joint_state_controller robot_arm_controller" />
+</launch>
+
