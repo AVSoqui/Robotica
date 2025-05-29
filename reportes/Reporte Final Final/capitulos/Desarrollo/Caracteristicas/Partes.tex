@@ -1,6 +1,39 @@
 \subsection{Partes} \label{subsec:partes}
 Aquí pondrán la información de las piezas del robot. Pueden eliminar las siguientes subsecciones y simplemente explicar los motores usados y el material de los eslabones porque ya no hay tiempo.
 \subsubsection{Motores} \label{subsubsec:motores}
-Explicarán cuál es el motor que usaron, harán referencia a la hoja de datos, así como las transmisiones (por ejemplo, las de las pinzas) o reductores de velocidad a los que están acoplados. Deben de poner también información como: masa, fuerza o torque máximo, razón de reducción (por ejemplo, 10/1) y la velocidad máxima.
+
+Para el presente diseño se seleccionaron diferentes motores eléctricos en función de los requerimientos de torque y velocidad de cada articulación, así como su facilidad de integración con sistemas de reducción mecánica. A continuación se detallan los actuadores y transmisiones utilizadas:
+
+\begin{itemize}
+    \item \textbf{Motenergy ME1616} (Eslabon 1): motor brushless de alto rendimiento, con una potencia nominal de \textbf{10 kW}. De acuerdo con su hoja de datos, puede entregar un \textbf{torque pico de hasta 50 Nm}, con una velocidad máxima de \textbf{5000 RPM}. Es utilizado en aplicaciones donde se requiere alta potencia en el eje base del robot.
+
+    \item \textbf{ATO 10kW BLDC} (Eslabon 2): motor sin escobillas de 10 kW, con características similares al anterior. Tiene un \textbf{torque nominal de 30 Nm} y puede alcanzar \textbf{6000 RPM}. Está acoplado a un sistema de transmisión directa en una de las articulaciones principales. Hoja de datos disponible en el sitio oficial de ATO.
+
+    \item \textbf{NEMA 34 + Reductor 10:1} (Eslabon 3): motor paso a paso de alto torque combinado con un reductor planetario de \textbf{relación 10:1}. Este conjunto permite obtener \textbf{torques mayores a 12 Nm}, con una velocidad angular máxima reducida a aproximadamente \textbf{300 RPM}. Es adecuado para articulaciones intermedias que requieren precisión y fuerza moderada.
+
+    \item \textbf{NEMA 23 + Reductor 10:1} (Eslabon 4): este conjunto se utilizó en la pinza u otros mecanismos de bajo requerimiento de torque. El motor tiene una masa reducida y proporciona alrededor de \textbf{2 a 3 Nm} con la ayuda del reductor. La velocidad de salida también se reduce a valores menores a \textbf{400 RPM}, facilitando el control.
+
+\end{itemize}
+
+Cada uno de estos actuadores fue seleccionado considerando el análisis de torque estático de cada articulación, así como la necesidad de desacoplar la inercia del sistema mediante reducción mecánica. Las hojas de datos correspondientes fueron utilizadas para establecer los límites máximos de operación y calcular márgenes de seguridad en el diseño.
+
+
 \subsubsection{Eslabones} \label{subsubsec:eslabones}
-Pondrán la masa, inercia, longitud y material de cada eslabón.
+Para realizar el modelado dinámico y la estimación de esfuerzos, es fundamental conocer las propiedades físicas de cada componente del robot. En la siguiente tabla se presentan la masa, longitud y material de la base y de cada uno de los eslabones. Todos los componentes fueron fabricados en \textbf{PLA}, un material polimérico ampliamente utilizado en manufactura aditiva por su ligereza y facilidad de impresión.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Componente} & \textbf{Material} & \textbf{Masa (kg)} & \textbf{Longitud (cm)} \\
+\hline
+Base        & PLA & 20.485   & 28  \\
+Eslabón 1   & PLA & 14.805   & 22  \\
+Eslabón 2   & PLA & 14.929   & 50  \\
+Eslabón 3   & PLA & 12.293   & 43  \\
+Eslabón 4   & PLA & 2.2635   & 6   \\
+\hline
+\end{tabular}
+\caption{Propiedades físicas de los eslabones del robot}
+\label{tab:propiedades_eslabones}
+\end{table}
